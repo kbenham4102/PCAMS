@@ -354,21 +354,25 @@ in the score plot.''' % (k, tol))
         plt.legend(loc = 'best')
         plt.show()
 
-# To compare a two population spectra set where numspec1 is the number of
-# columns of spectra belonging to the first population
-    def PCplotlabeled(self, numspec1, Xpc, Ypc,
-    title = 'Score Plot Pop1 vs Pop2', pop1 = 'Pop1', pop2 = 'Pop2'):
+# To compare a 'numpop' population spectra set where numspec1 is the number of
+# columns of spectra belonging to each population, must be equal. Default principle 
+# components to plot are 1 and 2.
+    def PCplotlabeled(self, numspec1, numpop, Xpc = 1, Ypc = 2,
+    title = 'Score Plot'):
             PCs = np.asarray(self.PCs)
             Xpc = Xpc - 1 #Correct to zero indexing
             Ypc = Ypc - 1
-            X1 = PCs[:numspec1,Xpc]
-            X2 = PCs[numspec1:,Xpc]
-            Y1 = PCs[:numspec1,Ypc]
-            Y2 = PCs[numspec1:,Ypc]
+            X = np.zeros((numspec1, numpop))
+            Y = np.zeros((numspec1, numpop))
+
+            for i in range(numpop):
+                X[:,i] = PCs[i*numspec1:(i+1)*numspec1, Xpc]
+                Y[:,i] = PCs[i*numspec1:(i+1)*numspec1, Ypc]
+
             fig = plt.figure(num = 1)
             ax1 = fig.add_subplot(111)
-            ax1.scatter(X1, Y1, s = 2, c = 'b', label = pop1)
-            ax1.scatter(X2, Y2, s = 2, c = 'r', label = pop2)
+            for i in range(numpop):
+                ax1.scatter(X[:,i], Y[:,i], s = 2, label = "P" + str(i+1))
             ax1.set_xlabel('PC%d' % (Xpc + 1))
             ax1.set_ylabel('PC%d' % (Ypc + 1))
             ax1.set_title(title)
