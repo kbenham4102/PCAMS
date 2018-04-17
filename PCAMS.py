@@ -193,10 +193,9 @@ class genpcs(object):
         self.V_SVD = V
         self.Vt = Vt
         self.U = U
-        self.co_svd = np.dot(np.dot(np.dot(V,S),U.T), np.dot(
-                                            np.dot(U,S), Vt))/(n-1)
         self.PCf = np.dot(U,S)
         self.PCs = np.dot(S,Vt).T
+     
     # Reconstruct original data using k principal components
     def reconstruct(self, k):
         U = self.U
@@ -359,25 +358,25 @@ in the score plot.''' % (k, tol))
 # components to plot are 1 and 2.
     def PCplotlabeled(self, numspec1, numpop, Xpc = 1, Ypc = 2,
     title = 'Score Plot'):
-            PCs = np.asarray(self.PCs)
-            Xpc = Xpc - 1 #Correct to zero indexing
-            Ypc = Ypc - 1
-            X = np.zeros((numspec1, numpop))
-            Y = np.zeros((numspec1, numpop))
+        PCs = np.asarray(self.PCs)
+        Xpc = Xpc - 1 #Correct to zero indexing
+        Ypc = Ypc - 1
+        X = np.zeros((numspec1, numpop))
+        Y = np.zeros((numspec1, numpop))
 
-            for i in range(numpop):
-                X[:,i] = PCs[i*numspec1:(i+1)*numspec1, Xpc]
-                Y[:,i] = PCs[i*numspec1:(i+1)*numspec1, Ypc]
+        for i in range(numpop):
+            X[:,i] = PCs[i*numspec1:(i+1)*numspec1, Xpc]
+            Y[:,i] = PCs[i*numspec1:(i+1)*numspec1, Ypc]
 
-            fig = plt.figure(num = 1)
-            ax1 = fig.add_subplot(111)
-            for i in range(numpop):
-                ax1.scatter(X[:,i], Y[:,i], s = 2, label = "P" + str(i+1))
-            ax1.set_xlabel('PC%d' % (Xpc + 1))
-            ax1.set_ylabel('PC%d' % (Ypc + 1))
-            ax1.set_title(title)
-            plt.legend(loc = 'best')
-            plt.show()
+        fig = plt.figure(num = 1)
+        ax1 = fig.add_subplot(111)
+        for i in range(numpop):
+            ax1.scatter(X[:,i], Y[:,i], s = 2, label = "P" + str(i+1))
+        ax1.set_xlabel('PC%d' % (Xpc + 1))
+        ax1.set_ylabel('PC%d' % (Ypc + 1))
+        ax1.set_title(title)
+        plt.legend(loc = 'best')
+        plt.show()
 
 # Plot the unlabeled score plot of the samples
     def plotPC1PC2sam(self):
